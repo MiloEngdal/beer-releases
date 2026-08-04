@@ -47,8 +47,12 @@
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
     padding:13px 14px;margin-bottom:10px;scroll-margin-top:90px;transition:box-shadow .2s;}
   .card.hl{box-shadow:0 0 0 2px var(--accent);}
-  .row1{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
-  .row1>div:first-child{min-width:0;flex:1;}
+  .row1{display:flex;gap:11px;align-items:flex-start;}
+  .meta{min-width:0;flex:1;}
+  .thumb{flex:0 0 auto;width:54px;height:70px;border-radius:9px;background:#fff;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--line);}
+  .thumb img{max-width:100%;max-height:100%;object-fit:contain;}
+  .thumb.ph{background:var(--card2);color:var(--muted);font-size:24px;}
   .name{font-size:16px;font-weight:650;margin:0;overflow-wrap:anywhere;}
   .brew{color:var(--muted);font-size:13px;margin:1px 0 0;overflow-wrap:anywhere;}
   .rating{flex:0 0 auto;text-align:center;background:var(--card2);border:1px solid var(--line);
@@ -182,9 +186,13 @@ function cardHTML(b, flat){
     b.price_sek!=null?`<span class="chip">${b.price_sek} kr</span>`:"",
     b.volume_ml?`<span class="chip">${b.volume_ml} ml</span>`:"",
   ].filter(Boolean).join("");
+  const thumb = b.image
+    ? `<div class="thumb"><img loading="lazy" src="${esc(b.image)}" alt="" onerror="this.parentNode.classList.add('ph');this.remove();this.parentNode.textContent='🍺'"></div>`
+    : `<div class="thumb ph">🍺</div>`;
   return `<div class="card" id="${esc(b.id)}">
     <div class="row1">
-      <div><p class="name">${esc(b.beer)}</p><p class="brew">${esc(b.brewery)}</p></div>
+      ${thumb}
+      <div class="meta"><p class="name">${esc(b.beer)}</p><p class="brew">${esc(b.brewery)}</p></div>
       <div class="rating"><b>${b.rating??"—"}</b><small>${b.votes?b.votes.toLocaleString():"·"}</small></div>
     </div>
     <div class="chips">${chips}</div>
